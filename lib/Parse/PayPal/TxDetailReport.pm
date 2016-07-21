@@ -96,7 +96,12 @@ sub parse_paypal_txdetail_report {
             my $tx = {};
             my $txcols = $res->[2]{transaction_columns};
             for (1..$#{$row}) {
-                $tx->{ $txcols->[$_-1] } = $row->[$_];
+                my $header = $txcols->[$_-1];
+                if ($header =~ /Date$/ && $row->[$_]) {
+                    $tx->{$header} = _parse_date($row->[$_]);
+                } else {
+                    $tx->{$header} = $row->[$_];
+                }
             }
             push @{ $res->[2]{transactions} }, $tx;
         } elsif ($row->[0] eq 'SF') { # section footer
@@ -201,6 +206,8 @@ Sample result when parse is successful:
              "Auction Closing Date"               => "",
              "Auction Site"                       => "",
              "Authorization Review Status"        => 1,
+             ...
+             "Transaction Completion Date"        => 1467273397,
              ...
          },
          ...
