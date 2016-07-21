@@ -74,11 +74,13 @@ sub parse_paypal_txdetail_report {
     my @files;
     if (my $strings = $args{strings}) {
         require IO::Scalar;
+        require String::BOM;
 
         if (!$format) {
             $format = $strings->[0] =~ /\t/ ? 'tsv' : 'csv';
         }
-        for my $str (@{ $strings }) {
+        for my $str0 (@{ $strings }) {
+            my $str = String::BOM::strip_bom_from_string($str0);
             my $fh = IO::Scalar->new(\$str);
             push @handles, $fh;
             push @files, "string";

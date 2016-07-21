@@ -2,7 +2,7 @@ Revision history for Parse-PayPal-TxDetailReport
 
 0.003   2016-07-21 (PERLANCAR)
 
-	- Handle Byte Order Mark on csv files.
+	- Handle Byte Order Mark on files.
 
 
 0.002   2016-07-21 (PERLANCAR)
