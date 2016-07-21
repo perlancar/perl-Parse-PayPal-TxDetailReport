@@ -1,5 +1,10 @@
 Revision history for Parse-PayPal-TxDetailReport
 
+0.003   2016-07-21 (PERLANCAR)
+
+	- Handle Byte Order Mark on csv files.
+
+
 0.002   2016-07-21 (PERLANCAR)
 
         - Also accept strings as inputs as alternative to filenames.
