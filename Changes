@@ -1,5 +1,10 @@
 Revision history for Parse-PayPal-TxDetailReport
 
+0.004   2016-07-21 (PERLANCAR)
+
+	- Also handle BOM on strings.
+
+
 0.003   2016-07-21 (PERLANCAR)
 
 	- Handle Byte Order Mark on files.
