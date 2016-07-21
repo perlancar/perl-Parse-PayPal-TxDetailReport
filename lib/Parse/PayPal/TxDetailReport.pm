@@ -30,6 +30,9 @@ $SPEC{parse_paypal_txdetail_report} = {
 Files can all be in tab-separated or comma-separated (CSV) format but cannot be
 mixed. If there are multiple files, they must be ordered.
 
+The result will be a hashref. The main key is `transactions` which will be an
+arrayref of hashrefs.
+
 Dates will be converted into Unix timestamps.
 
 _
