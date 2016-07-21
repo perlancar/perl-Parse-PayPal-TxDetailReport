@@ -84,12 +84,15 @@ sub parse_paypal_txdetail_report {
             push @files, "string";
         }
     } elsif (my $files = $args{files}) {
+        require File::BOM;
+
         if (!$format) {
             $format = $files->[0] =~ /\.(csv)\z/i ? 'csv' : 'tsv';
         }
         for my $file (@{ $files }) {
-            open my($fh), "<:encoding(utf8)", $file
+            open my($fh), "<:encoding(utf8):via(File::BOM)", $file
                 or return [500, "Can't open file '$file': $!"];
+
             push @handles, $fh;
             push @files, $file;
         }
