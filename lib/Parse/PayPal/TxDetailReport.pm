@@ -22,6 +22,14 @@ sub _parse_date {
 $SPEC{parse_paypal_txdetail_report} = {
     v => 1.1,
     summary => 'Parse PayPal transaction detail report into data structure',
+    description => <<'_',
+
+The result will be a hashref. The main key is `transactions` which will be an
+arrayref of hashrefs.
+
+Dates will be converted into Unix timestamps.
+
+_
     args => {
         files => {
             schema => ['array*', of=>'filename*', min_len=>1],
@@ -29,11 +37,6 @@ $SPEC{parse_paypal_txdetail_report} = {
 
 Files can all be in tab-separated or comma-separated (CSV) format but cannot be
 mixed. If there are multiple files, they must be ordered.
-
-The result will be a hashref. The main key is `transactions` which will be an
-arrayref of hashrefs.
-
-Dates will be converted into Unix timestamps.
 
 _
         },
