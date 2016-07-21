@@ -1,5 +1,11 @@
 Revision history for Parse-PayPal-TxDetailReport
 
+0.005   2016-07-21 (PERLANCAR)
+
+	- Initialize transactions to avoid crash when there is no
+	  transactions in input.
+
+
 0.004   2016-07-21 (PERLANCAR)
 
 	- Also handle BOM on strings.
