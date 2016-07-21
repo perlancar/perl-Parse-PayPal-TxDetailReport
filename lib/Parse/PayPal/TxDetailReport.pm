@@ -39,6 +39,17 @@ Files can all be in tab-separated or comma-separated (CSV) format but cannot be
 mixed. If there are multiple files, they must be ordered.
 
 _
+            pos => 0,
+            greedy => 1,
+        },
+        strings => {
+            schema => ['array*', of=>'str*', min_len=>1],
+            description => <<'_',
+
+Instead of `files`, you can alternatively provide the file contents in
+`strings`.
+
+_
         },
         format => {
             schema => ['str*', in=>[qw/tsv csv/]],
@@ -50,19 +61,46 @@ CSV, or /txt|tsv/ for tab-separated).
 _
         },
     },
+    args_rels => {
+        req_one => ['files', 'strings'],
+    },
 };
 sub parse_paypal_txdetail_report {
     my %args = @_;
 
-    my $files = $args{files} or return [400, "Please specify files"];
     my $format = $args{format};
 
-    if (!$format) {
-        $format = $files->[0] =~ /\.(csv)\z/i ? 'csv' : 'tsv';
+    my @handles;
+    my @files;
+    if (my $strings = $args{strings}) {
+        require IO::Scalar;
+
+        if (!$format) {
+            $format = $strings->[0] =~ /\t/ ? 'tsv' : 'csv';
+        }
+        for my $str (@{ $strings }) {
+            my $fh = IO::Scalar->new(\$str);
+            push @handles, $fh;
+            push @files, "string";
+        }
+    } elsif (my $files = $args{files}) {
+        if (!$format) {
+            $format = $files->[0] =~ /\.(csv)\z/i ? 'csv' : 'tsv';
+        }
+        for my $file (@{ $files }) {
+            open my($fh), "<:encoding(utf8)", $file
+                or return [500, "Can't open file '$file': $!"];
+            push @handles, $fh;
+            push @files, $file;
+        }
+    } else {
+        return [400, "Please specify files (or strings)"];
     }
 
+    my $res = [200, "OK", {}];
+
     my $code_parse_row = sub {
-        my ($res, $row) = @_;
+        my $row = shift;
 
         if ($row->[0] eq 'RH') { # row header
             $res->[2]{RH_seen}++ and do {
@@ -129,7 +167,6 @@ sub parse_paypal_txdetail_report {
     };
 
     my $code_on_eof = sub {
-        my $res = shift;
         delete $res->[2]{cur_file};
         delete $res->[2]{cur_file_seq};
         delete($res->[2]{RH_seen}) or do {
@@ -147,17 +184,12 @@ sub parse_paypal_txdetail_report {
     };
 
     my $code_on_eor = sub {
-        my $res = shift;
         delete $res->[2]{transaction_columns};
     };
 
-    my $res = [200, "OK", {}];
-    for my $i (0..$#{$files}) {
+    for my $i (0..$#files) {
         $res->[2]{cur_file_seq} = $i+1;
-        my $file = $files->[$i];
-        $res->[2]{cur_file} = $file;
-        open my($fh), "<:encoding(utf8)", $file
-            or return [500, "Can't open file #$i ($file): $!"];
+        $res->[2]{cur_file} = $files[$i];
         my $csv;
         if ($format eq 'csv') {
             require Text::CSV;
@@ -165,18 +197,19 @@ sub parse_paypal_txdetail_report {
                 or return [500, "Cannot use CSV: ".Text::CSV->error_diag];
         }
         if ($format eq 'csv') {
-            while (my $row = $csv->getline($fh)) {
-                $code_parse_row->($res, $row);
+            while (my $row = $csv->getline($handles[$i])) {
+                $code_parse_row->($row);
             }
         } else {
+            my $fh = $handles[$i];
             while (my $line = <$fh>) {
                 chomp($line);
-                $code_parse_row->($res, [split /\t/, $line]);
+                $code_parse_row->([split /\t/, $line]);
             }
         }
-        $code_on_eof->($res);
+        $code_on_eof->();
     }
-    $code_on_eor->($res);
+    $code_on_eor->();
 
   RETURN_RES:
     $res;
