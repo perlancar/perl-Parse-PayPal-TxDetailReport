@@ -102,7 +102,9 @@ sub parse_paypal_txdetail_report {
         return [400, "Please specify files (or strings)"];
     }
 
-    my $res = [200, "OK", {}];
+    my $res = [200, "OK", {
+        transactions => [],
+    }];
 
     my $code_parse_row = sub {
         my $row = shift;
