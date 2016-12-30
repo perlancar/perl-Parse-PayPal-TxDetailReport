@@ -229,7 +229,7 @@ sub parse_paypal_txdetail_report {
 
  use Parse::PayPal::TxDetailReport qw(parse_paypal_txdetail_report);
 
- my $res = parse_paypal_txdetail_report(files => []);
+ my $res = parse_paypal_txdetail_report(files => ["part1.csv", "part2.csv"]);
 
 Sample result when there is a parse error:
 
@@ -260,9 +260,12 @@ Sample result when parse is successful:
 
 =head1 DESCRIPTION
 
-This module provides routine to parse PayPal transaction detail report into a
-Perl data structure. Version 11 is supported. Multiple files are supported. Both
-the tab-separated format and comma-separated (CSV) format are supported.
+PayPal provides various kinds reports which you can retrieve from their website
+under Reports menu. This module provides routine to parse PayPal transaction
+detail report (from the website under Reports > Transactions > Transactions
+detail) into a Perl data structure. Version 11 is supported. Multiple files are
+supported. Both the tab-separated format and comma-separated (CSV) format are
+supported.
 
 
 =head1 SEE ALSO
@@ -271,3 +274,5 @@ L<https://www.paypal.com>
 
 Specification of transaction detail report format:
 L<https://www.paypalobjects.com/webstatic/en_US/developer/docs/pdf/PP_LRD_Gen_TransactionDetailReport.pdf>
+
+L<Parse::PayPal::TxFinderReport>
