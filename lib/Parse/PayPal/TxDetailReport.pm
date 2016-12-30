@@ -103,6 +103,7 @@ sub parse_paypal_txdetail_report {
     }
 
     my $res = [200, "OK", {
+        format => "txdetail_v11",
         transactions => [],
     }];
 
@@ -238,6 +239,7 @@ Sample result when there is a parse error:
 Sample result when parse is successful:
 
  [200, "OK", {
+     format => "txdetail_v11",
      account_id => "...",
      report_generation_date => 1467375872,
      report_version         => 11,
