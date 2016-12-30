@@ -1,5 +1,10 @@
 Revision history for Parse-PayPal-TxDetailReport
 
+0.006   2016-12-30 (PERLANCAR)
+
+	- Add 'format' result key with value 'txdetail_v11'.
+
+
 0.005   2016-07-21 (PERLANCAR)
 
 	- Initialize transactions to avoid crash when there is no
