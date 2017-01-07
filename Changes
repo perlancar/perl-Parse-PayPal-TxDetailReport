@@ -1,5 +1,3 @@
-Revision history for Parse-PayPal-TxDetailReport
-
 0.006   2016-12-30 (PERLANCAR)
 
 	- Add 'format' result key with value 'txdetail_v11'.
