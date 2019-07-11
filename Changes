@@ -1,32 +1,32 @@
-0.007   2017-07-03 (PERLANCAR)
+0.007   2017-07-03  Released-By: PERLANCAR
 
 	- No functional changes.
 
 	- Remove usage of Log::Any.
 
 
-0.006   2016-12-30 (PERLANCAR)
+0.006   2016-12-30  Released-By: PERLANCAR
 
 	- Add 'format' result key with value 'txdetail_v11'.
 
 
-0.005   2016-07-21 (PERLANCAR)
+0.005   2016-07-21  Released-By: PERLANCAR
 
 	- Initialize transactions to avoid crash when there is no
 	  transactions in input.
 
 
-0.004   2016-07-21 (PERLANCAR)
+0.004   2016-07-21  Released-By: PERLANCAR
 
 	- Also handle BOM on strings.
 
 
-0.003   2016-07-21 (PERLANCAR)
+0.003   2016-07-21  Released-By: PERLANCAR
 
 	- Handle Byte Order Mark on files.
 
 
-0.002   2016-07-21 (PERLANCAR)
+0.002   2016-07-21  Released-By: PERLANCAR
 
         - Also accept strings as inputs as alternative to filenames.
 
@@ -35,6 +35,6 @@
         - Fix misplaced paragraph in doc.
 
 
-0.001   2016-07-21 (PERLANCAR)
+0.001   2016-07-21  Released-By: PERLANCAR
 
         - First version.
